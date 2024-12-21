@@ -1,17 +1,118 @@
 @page "/nouvelle-partie"
 @using lesEchoDuNeant.Models
+@inject IJSRuntime JSRuntime
+@inject lesEchoDuNeant.Service.ChoixPersoService ChoixPersoService;
+
+<h1>Bienvenu dans votre aventure @ChoixPersoService.PersonnageChoisis</h1>
+
+<div class="map-container">
+    @foreach (var cellule in Map.Cellules)
+    {
+        <div style="background-image: url('@cellule.Image'); position:relative;">
+            @if (cellule.HasPlayer)
+            {
+                <img src="@cellule.PersonnageImage" alt="Personnage" class="personnage">
+            }
+
+        </div>
+    }
+    }
+</div>
 
 @*Composant MapRenderer pour afficher la carte*@
-<MapRenderer Map=Map />
+@* <MapRenderer Map=Map /> *@
 
 @code
 {
     private lesEchoDuNeant.Map.Map Map;
+    private int posX;
+    private int posY;
 
     protected override void OnInitialized()
     {
         // Génére une carte de 10x10
         Map = new lesEchoDuNeant.Map.Map(10, 10); // Carte 10x10
+        string personnage = ChoixPersoService.PersonnageChoisis;
+        var (posX, posY) = Map.PlacerPersonnage(personnage);
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                Console.WriteLine("Appel JS en cours...");
+                await JSRuntime.InvokeVoidAsync("addKeyboardEventListener");
+                Console.WriteLine("Appel JS réussi");
+                await JSRuntime.InvokeVoidAsync("registerInstance", DotNetObjectReference.Create(this));
+                Console.WriteLine("Instance enregistré");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de l'appel à addKeyboardEventListener : {ex.Message}");
+            }
+        }
+    }
+
+
+    [JSInvokable("MovePlayer")]
+    public void MovePlayer(string direction)
+    {
+        Console.WriteLine($"MovePlayer appelé avec directions: {direction}");
+
+        int newX = posX;
+        int newY = posY;
+
+        // Mise à jour de la position selon la direction
+        switch (direction)
+        {
+            case "up": // Haut
+                newY -= 1;
+                Console.WriteLine("Haut");
+                break;
+            case "down": // Bas
+                newY += 1;
+                Console.WriteLine("Bas");
+                break;
+            case "left": // Gauche
+                newX -= 1;
+                Console.WriteLine("Gauche");
+                break;
+            case "right": // Droite
+                newX += 1;
+                Console.WriteLine("Droite");
+                break;
+        }
+
+        Console.WriteLine($"Tentative de déplacement vers {newX}, {newY}");
+
+        // Vérifie que la nouvelle position est valide
+        if (Map.IsValidPosition(newX, newY))
+        {
+            var celluleCible = Map.GetCellule(newX, newY);
+            if (celluleCible.TypeTerrain == "Herbe")
+            {
+                // Met à jour la position
+                Map.GetCellule(posX, posY).HasPlayer = false; // Retire le joueur de l'ancienne position
+                posX = newX;
+                posY = newY;
+                Map.GetCellule(posX, posY).HasPlayer = true; // Place le joueur dans la nouvelle position
+
+                StateHasChanged(); // Met à jour l'affichage
+            }else
+            {
+                Console.WriteLine($"Terrain invalide : ${celluleCible.TypeTerrain}");
+            }
+        }else
+        {
+            Console.WriteLine($"Position invalide ({newX}, {newY})");
+        }
+    }
+
+    public static void TestMethod()
+    {
+        Console.WriteLine("TestMethod appelé avec succès");
+    }
+
 }
-   

@@ -3,13 +3,12 @@
 
 <h1>Menu Principal</h1>
 <button @onclick="NouvellePartie">Nouvelle Partie</button>
-<button @onclick='() => NavigationManager.NavigateTo("/choix-perso")'>Choisir un perssonnage</button>
 <button @onclick="Quitter">Quitter</button>
 
 @code {
     private void NouvellePartie()
     {
-        NavigationManager.NavigateTo("/nouvelle-partie");
+        NavigationManager.NavigateTo("/choix-perso");
     }
 
     private void Quitter()

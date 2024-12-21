@@ -5,6 +5,8 @@ namespace lesEchoDuNeant.Service
     public class ChoixPersoService
     {
         public string PersonnageChoisis{get;private set;}
+        public (int x,int y) PositionPersonnage{get;private set;}
+
         public void SaveChoice(string personnage)
         {
             PersonnageChoisis = personnage;
@@ -14,5 +16,11 @@ namespace lesEchoDuNeant.Service
         {
             return !string.IsNullOrEmpty(PersonnageChoisis);
         }
+
+        public void SetInitialPosition(int x,int y)
+        {
+            PositionPersonnage = (x, y);
+        }
+
     }
 }

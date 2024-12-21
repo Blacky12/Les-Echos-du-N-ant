@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0H5AHYLuSPGAnPV/FtSz2DIxrOEYMSzCnE88f9+szCQ=",
+  "Hash": "3Hfhq8OPt7U8QbeR36HWMAH/koEygdj7aYy+B4tTrSM=",
   "Source": "lesEchoDuNeant",
   "BasePath": "_content/lesEchoDuNeant",
   "Mode": "Default",
@@ -395,6 +395,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/montagne.webp"
+    },
+    {
+      "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/js/keyboard.js",
+      "SourceId": "lesEchoDuNeant",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/",
+      "BasePath": "_content/lesEchoDuNeant",
+      "RelativePath": "js/keyboard.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/keyboard.js"
     }
   ]
 }

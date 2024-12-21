@@ -81,6 +81,10 @@
       "PackagePath": "staticwebassets/images/montagne.webp"
     },
     {
+      "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/js/keyboard.js",
+      "PackagePath": "staticwebassets/js/keyboard.js"
+    },
+    {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.lesEchoDuNeant.props",
       "PackagePath": "build\\lesEchoDuNeant.props"
     },

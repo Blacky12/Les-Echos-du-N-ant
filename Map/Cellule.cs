@@ -7,6 +7,8 @@ namespace lesEchoDuNeant.Map
         public int Y{ get; set; }
         public string TypeTerrain{ get; set; }
         public string Image{get; set; }
+        public bool HasPlayer{ get; set; } = false;
+        public string PersonnageImage{get; set; }
 
         public Cellule(int x, int y, string typeTerrain,string image)
         {
