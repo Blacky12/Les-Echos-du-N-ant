@@ -9,6 +9,7 @@
     @foreach (var cellule in Map.Cellules)
     {
         <div style="background-image: url('@cellule.Image'); position:relative;">
+            <span>@cellule.TypeTerrain</span>
             @if (cellule.HasPlayer)
             {
                 <img src="@cellule.PersonnageImage" alt="Personnage" class="personnage">
@@ -19,7 +20,7 @@
     }
 </div>
 
-@*Composant MapRenderer pour afficher la carte*@
+@* Composant MapRenderer pour afficher la carte*@
 @* <MapRenderer Map=Map /> *@
 
 @code
@@ -33,7 +34,10 @@
         // Génére une carte de 10x10
         Map = new lesEchoDuNeant.Map.Map(10, 10); // Carte 10x10
         string personnage = ChoixPersoService.PersonnageChoisis;
-        var (posX, posY) = Map.PlacerPersonnage(personnage);
+
+        (posX, posY) = Map.PlacerPersonnage(personnage);
+
+        Console.WriteLine($"Position initial du personnage : ({posX}), ({posY})");
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -65,49 +69,58 @@
         int newY = posY;
 
         // Mise à jour de la position selon la direction
-        switch (direction)
+        switch (direction.ToLower())
         {
             case "up": // Haut
-                newY -= 1;
+                newX -= 1;
                 Console.WriteLine("Haut");
                 break;
             case "down": // Bas
-                newY += 1;
+                newX += 1;
                 Console.WriteLine("Bas");
                 break;
             case "left": // Gauche
-                newX -= 1;
+                newY -= 1;
                 Console.WriteLine("Gauche");
                 break;
             case "right": // Droite
-                newX += 1;
+                newY += 1;
                 Console.WriteLine("Droite");
                 break;
         }
 
         Console.WriteLine($"Tentative de déplacement vers {newX}, {newY}");
 
+        Console.WriteLine($"Cellule actuelle avant déplacement : ({posX}, {posY}) - HasPlayer={Map.GetCellule(posX, posY).HasPlayer}");
+        Console.WriteLine($"Cellule cible : ({newX}, {newY}) - Type={Map.GetCellule(newX, newY).TypeTerrain}, HasPlayer={Map.GetCellule(newX, newY).HasPlayer}");
+
         // Vérifie que la nouvelle position est valide
         if (Map.IsValidPosition(newX, newY))
         {
-            var celluleCible = Map.GetCellule(newX, newY);
-            if (celluleCible.TypeTerrain == "Herbe")
+            var targetCell = Map.GetCellule(newX, newY);
+
+            if (targetCell.TypeTerrain == "Herbe" || targetCell.TypeTerrain == "Montagne")
             {
+                Console.WriteLine($"Deplacement valide vers {posX}, {posY}");
+
                 // Met à jour la position
                 Map.GetCellule(posX, posY).HasPlayer = false; // Retire le joueur de l'ancienne position
+                Console.WriteLine($"Avant mise a jour: posX = {posX}, posY = {posY}");
                 posX = newX;
                 posY = newY;
-                Map.GetCellule(posX, posY).HasPlayer = true; // Place le joueur dans la nouvelle position
-
-                StateHasChanged(); // Met à jour l'affichage
+                Console.WriteLine($"Apres mise a jour: posX = {posX}, posY = {posY}");
+                Map.GetCellule(posX, posY).HasPlayer = true;
+                Console.WriteLine($"Mise à jour cellule cible : (posX={posX}, posY={posY}) - HasPlayer={Map.GetCellule(posX, posY).HasPlayer}");           
             }else
             {
-                Console.WriteLine($"Terrain invalide : ${celluleCible.TypeTerrain}");
+                Console.WriteLine($"Terrain invalide : {targetCell.TypeTerrain}");
             }
-        }else
-        {
-            Console.WriteLine($"Position invalide ({newX}, {newY})");
         }
+        else
+        {
+            Console.WriteLine($"Position invalide : ({newX}), ({newY})");
+        }
+        StateHasChanged(); // Met à jour l'affichage
     }
 
     public static void TestMethod()

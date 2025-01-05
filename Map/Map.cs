@@ -9,16 +9,16 @@ namespace lesEchoDuNeant.Map
     //Structure globale de la carte qui contient toute les cellules dans une liste
     public class Map
     {
-        public int Hauteur { get; }
-        public int Largeur { get; }
-        public List<Cellule> Cellules { get; }
+        public int Hauteur { get; private set; }
+        public int Largeur { get; private set;}
+        public Cellule[,] Cellules{ get; private set; }
         public Map(int hauteur, int largeur)
         {
             Hauteur = hauteur;
             Largeur = largeur;
-            Cellules = new List<Cellule>();
+            Cellules = new Cellule[Largeur, Hauteur];
 
-            // Génération aléatoire
+            // Type de terrain
             var typesTerrain = new[]
             {
                 new {Type = "Herbe", Image = "/images/herbe.webp"},
@@ -26,16 +26,21 @@ namespace lesEchoDuNeant.Map
                 new {Type = "Montagne", Image = "/images/montagne.webp"}
             };
 
+            // Génération aléatoire
             var random = new Random();
             for (int y = 0; y < Hauteur; y++)
             {
                 for (int x = 0; x < Largeur; x++)
                 {
                     var terrain = typesTerrain[random.Next(typesTerrain.Length)];
-                    Cellules.Add(new Cellule(x, y, terrain.Type, terrain.Image));
+                    Cellules[x,y] = new Cellule(x, y, terrain.Type, terrain.Image);
+
+                    Console.WriteLine($"Cellule généré {x},{y}  Terrain : {terrain.Type}");
                 }
+                
             }
         }
+
 
         public bool IsValidPosition(int x, int y)
         {
@@ -44,7 +49,11 @@ namespace lesEchoDuNeant.Map
 
         public Cellule GetCellule(int x, int y)
         {
-            return Cellules.FirstOrDefault(c=> c.X == x && c.Y == y);
+            if (x >= 0 && x < Largeur && y >= 0 && y < Hauteur)
+            {
+                return Cellules[x, y];
+            }
+            return null;
         }
 
         public (int posX, int posY) PlacerPersonnage(string personnage)
@@ -59,13 +68,15 @@ namespace lesEchoDuNeant.Map
                 posX = random.Next(0, Largeur);
                 posY = random.Next(0, Hauteur);
 
+                cellule = GetCellule(posX, posY);
+
                 // Recherche d'une cellule correspondante
-                cellule = Cellules.FirstOrDefault(c => c.X == posX && c.Y == posY && c.TypeTerrain == "Herbe");
-            } while (cellule == null);
+            } while (cellule == null || cellule.TypeTerrain != "Herbe");
 
             // Mise à jour de la cellule pour indiquer la présence du joueur
             cellule.HasPlayer = true;
             cellule.PersonnageImage = $"/images/{personnage.ToLower()}.png";
+            Console.WriteLine($"Position initial du personnage : ({posX}), ({posY})");
 
             // Retourner les coordonnées
             return (posX, posY);
