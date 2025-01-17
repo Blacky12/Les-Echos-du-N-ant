@@ -1,22 +1,36 @@
 @page "/nouvelle-partie"
 @using lesEchoDuNeant.Models
+@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @inject lesEchoDuNeant.Service.ChoixPersoService ChoixPersoService;
 
 <h1>Bienvenu dans votre aventure @ChoixPersoService.PersonnageChoisis</h1>
 
-<div class="map-container">
-    @foreach (var cellule in Map.Cellules)
-    {
-        <div style="background-image: url('@cellule.Image'); position:relative;">
-            <span>@cellule.TypeTerrain</span>
-            @if (cellule.HasPlayer)
-            {
-                <img src="@cellule.PersonnageImage" alt="Personnage" class="personnage">
-            }
 
+<div class="map-container">
+    @for (int y = 0; y < Map.Hauteur; y++)
+    {
+        <div class="row">
+            @for (int x = 0; x < Map.Largeur; x++)
+            {
+                var cellule = Map.GetCellule(x,y);
+                <div class="cell" style="background-image: url('@cellule.Image'); position: relative;">
+                    @if (cellule.HasPlayer)
+                    {
+                        <img src="@cellule.PersonnageImage" alt="Personnage" class="player">
+                    }
+                    @if (cellule.HasMonstre)
+                    {
+                        <img src="@cellule.Monstres.ImagePath" alt="Monstre" class="monster">
+                        <span style="color:red"> Monstre : @cellule.Monstres.GetType().Name</span>
+                    }
+                    
+                </div>
+            }
         </div>
-    }
+
+      
+        
     }
 </div>
 
@@ -36,6 +50,7 @@
         string personnage = ChoixPersoService.PersonnageChoisis;
 
         (posX, posY) = Map.PlacerPersonnage(personnage);
+        Map.PlacerMonstresAleatoires(10);
 
         Console.WriteLine($"Position initial du personnage : ({posX}), ({posY})");
     }
@@ -87,6 +102,7 @@
                 newY += 1;
                 Console.WriteLine("Droite");
                 break;
+
         }
 
         Console.WriteLine($"Tentative de déplacement vers {newX}, {newY}");
@@ -98,29 +114,47 @@
         if (Map.IsValidPosition(newX, newY))
         {
             var targetCell = Map.GetCellule(newX, newY);
+            var currentCell = Map.GetCellule(posX, posY);
 
-            if (targetCell.TypeTerrain == "Herbe" || targetCell.TypeTerrain == "Montagne")
+            // verification que la nouvelle cellule est vide
+            if(targetCell != null && (targetCell.TypeTerrain == "Herbe" || targetCell.TypeTerrain == "Montagne"))
             {
-                Console.WriteLine($"Deplacement valide vers {posX}, {posY}");
+                if (targetCell.HasMonstre)
+                {
+                    InitierCombat(targetCell.Monstres);
+                    return; // Arreter le deplacement
+                }
+                //Mettre à jour la cellule actuelle (retirer le joueur)
+                currentCell.HasPlayer = false;
+                currentCell.PersonnageImage = null;
 
-                // Met à jour la position
-                Map.GetCellule(posX, posY).HasPlayer = false; // Retire le joueur de l'ancienne position
-                Console.WriteLine($"Avant mise a jour: posX = {posX}, posY = {posY}");
+                //Deplacer le joueur dans la nouvelle cellule
+                targetCell.HasPlayer = true;
+                targetCell.PersonnageImage = $"/images/{ChoixPersoService.PersonnageChoisis.ToLower()}.png";
+
+                //Mettre à jour les coordonnées
                 posX = newX;
                 posY = newY;
-                Console.WriteLine($"Apres mise a jour: posX = {posX}, posY = {posY}");
-                Map.GetCellule(posX, posY).HasPlayer = true;
-                Console.WriteLine($"Mise à jour cellule cible : (posX={posX}, posY={posY}) - HasPlayer={Map.GetCellule(posX, posY).HasPlayer}");           
+
+                Console.WriteLine($"Deplacement vers {posX},{posY}");
+
             }else
             {
-                Console.WriteLine($"Terrain invalide : {targetCell.TypeTerrain}");
+                Console.WriteLine($"Deplacement impossible - case occupé ou terrain invalide");
             }
-        }
-        else
+
+        }else
         {
-            Console.WriteLine($"Position invalide : ({newX}), ({newY})");
+             Console.WriteLine($"Position invalide : ({newX}, {newY})");
         }
+
         StateHasChanged(); // Met à jour l'affichage
+
+    }
+
+    private void InitierCombat(Monstres monstre)
+    {
+        NavigationManager.Naviga
     }
 
     public static void TestMethod()

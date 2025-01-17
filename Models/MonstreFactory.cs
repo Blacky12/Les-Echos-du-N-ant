@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using lesEchoDuNeant.Pages;
+using lesEchoDuNeant.Models;
 
 namespace lesEchoDuNeant.Models
 {
@@ -8,16 +7,13 @@ namespace lesEchoDuNeant.Models
     {
         public static Monstres CreerMonstreAleatoire()
         {
-            string[] typeDeMonstre = {"Gobelin", "Troll"};
             var random = new Random();
-            var chx = random.Next(typeDeMonstre.Length);
+            int typeMonstre = random.Next(0, 2); // 0 pour Gobelin, 1 pour Troll
 
-            return typeDeMonstre[chx] switch
-            {
-                "Gobelin" => new Gobelin(),
-                "Troll" => new Troll(),
-                _ => throw new Exception("Type de monstre inconnue")
-            };
+            if (typeMonstre == 0)
+                return new Gobelin();
+            else
+                return new Troll();
         }
     }
 }

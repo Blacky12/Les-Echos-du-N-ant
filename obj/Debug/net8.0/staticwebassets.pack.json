@@ -57,12 +57,20 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/.~lock.DALL·E-2025-01-10-18.40.09-A-highly-detailed-and-fantasy-styled-illustration-of-a-troll.png#",
+      "PackagePath": "staticwebassets/images/.~lock.DALL·E-2025-01-10-18.40.09-A-highly-detailed-and-fantasy-styled-illustration-of-a-troll.png#"
+    },
+    {
       "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/archer.png",
       "PackagePath": "staticwebassets/images/archer.png"
     },
     {
       "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/eau.webp",
       "PackagePath": "staticwebassets/images/eau.webp"
+    },
+    {
+      "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/gobelin.png",
+      "PackagePath": "staticwebassets/images/gobelin.png"
     },
     {
       "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/guerrier.png",
@@ -79,6 +87,10 @@
     {
       "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/montagne.webp",
       "PackagePath": "staticwebassets/images/montagne.webp"
+    },
+    {
+      "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/troll.png",
+      "PackagePath": "staticwebassets/images/troll.png"
     },
     {
       "Id": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/js/keyboard.js",

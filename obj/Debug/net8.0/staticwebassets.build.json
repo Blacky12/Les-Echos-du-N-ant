@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3Hfhq8OPt7U8QbeR36HWMAH/koEygdj7aYy+B4tTrSM=",
+  "Hash": "s7GR9wT2gqSgL5AzWTirDXNhecGJDlsuzSwcnTQQxow=",
   "Source": "lesEchoDuNeant",
   "BasePath": "_content/lesEchoDuNeant",
   "Mode": "Default",
@@ -283,6 +283,25 @@
       "OriginalItemSpec": "wwwroot/favicon.ico"
     },
     {
+      "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/.~lock.DALL·E-2025-01-10-18.40.09-A-highly-detailed-and-fantasy-styled-illustration-of-a-troll.png#",
+      "SourceId": "lesEchoDuNeant",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/",
+      "BasePath": "_content/lesEchoDuNeant",
+      "RelativePath": "images/.~lock.DALL·E-2025-01-10-18.40.09-A-highly-detailed-and-fantasy-styled-illustration-of-a-troll.png#",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/.~lock.DALL·E-2025-01-10-18.40.09-A-highly-detailed-and-fantasy-styled-illustration-of-a-troll.png#"
+    },
+    {
       "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/archer.png",
       "SourceId": "lesEchoDuNeant",
       "SourceType": "Discovered",
@@ -319,6 +338,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/eau.webp"
+    },
+    {
+      "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/gobelin.png",
+      "SourceId": "lesEchoDuNeant",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/",
+      "BasePath": "_content/lesEchoDuNeant",
+      "RelativePath": "images/gobelin.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/gobelin.png"
     },
     {
       "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/guerrier.png",
@@ -395,6 +433,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/montagne.webp"
+    },
+    {
+      "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/images/troll.png",
+      "SourceId": "lesEchoDuNeant",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/",
+      "BasePath": "_content/lesEchoDuNeant",
+      "RelativePath": "images/troll.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/troll.png"
     },
     {
       "Identity": "/home/blacky/Documents/Etudes/Bac/2_ieme/Progra/C#/Exo_second_2/lesEchoDuNeant/wwwroot/js/keyboard.js",

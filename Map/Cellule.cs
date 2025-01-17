@@ -1,3 +1,5 @@
+using lesEchoDuNeant.Models;
+
 namespace lesEchoDuNeant.Map
 {
     // Brique de base de la carte. Chaque case est représenté par l'objet cellule
@@ -7,8 +9,14 @@ namespace lesEchoDuNeant.Map
         public int Y{ get; set; }
         public string TypeTerrain{ get; set; }
         public string Image{get; set; }
-        public bool HasPlayer{ get; set; } = false;
+        public bool HasPlayer{ get; set; }
         public string PersonnageImage{get; set; }
+
+        // monstre
+        public bool HasMonstre{ get; set; }
+        public string MonstreImage{get; set; }
+        public Monstres Monstres{get; set; }
+        
 
         public Cellule(int x, int y, string typeTerrain,string image)
         {
@@ -16,6 +24,8 @@ namespace lesEchoDuNeant.Map
             Y = y;
             TypeTerrain = typeTerrain;
             Image = image;
+            HasPlayer = false;
+            HasMonstre = false;
         }   
     }
 }

@@ -47,10 +47,12 @@ li {
 .map-container{
     display: grid;
     grid-template-columns: repeat(10, 1fr); /* 10 correspond à la largeur de la carte */
+    grid-gap: 2px;
     width: 100%;
     max-width: 100%;
     
 }
+
 
 .map-container div{
     position: relative;
@@ -137,6 +139,10 @@ li {
     gap:20px;
 }
 
+.row{
+    display: flex;
+}
+
 .personnage{
         border: 2px solid red; /* temporraire */
         position: absolute;
@@ -148,8 +154,48 @@ li {
         z-index: 10;
     }
 
+    .monstre{
+        border: 2px solid red; /* temporraire */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        z-index: 9;
+    }
+
+    .cell{
+        position: relative;
+        width: 80px; /* Ajustez en fonction du design */
+        height: 80px;
+        border: 1px solid #ccc;
+        background-size: cover;
+        background-position: center;
+    }
+
+   
+
     div[style*="background-image"] {
         position: relative; /* Assurez-vous que chaque cellule est relative */
         width: 100%;
         height: 100%;
+    }
+
+    img.player {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2; /* Le joueur est au-dessus */
+    }
+    
+    img.monster {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1; /* Les monstres sont en-dessous */
     }

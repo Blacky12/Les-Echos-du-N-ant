@@ -1,46 +1,52 @@
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Microsoft.VisualBasic;
+using lesEchoDuNeant.Models;
 
 namespace lesEchoDuNeant.Map
 {
-    //Structure globale de la carte qui contient toute les cellules dans une liste
+    // Structure globale de la carte qui contient toutes les cellules dans une liste
     public class Map
     {
         public int Hauteur { get; private set; }
-        public int Largeur { get; private set;}
-        public Cellule[,] Cellules{ get; private set; }
+        public int Largeur { get; private set; }
+        public Cellule[,] Cellules { get; private set; }
+
         public Map(int hauteur, int largeur)
         {
             Hauteur = hauteur;
             Largeur = largeur;
             Cellules = new Cellule[Largeur, Hauteur];
 
-            // Type de terrain
+            // Types de terrain
             var typesTerrain = new[]
             {
-                new {Type = "Herbe", Image = "/images/herbe.webp"},
-                new {Type = "Eau", Image = "/images/eau.webp"},
-                new {Type = "Montagne", Image = "/images/montagne.webp"}
+                new { Type = "Herbe", Image = "/images/herbe.webp" },
+                new { Type = "Eau", Image = "/images/eau.webp" },
+                new { Type = "Montagne", Image = "/images/montagne.webp" }
             };
 
-            // Génération aléatoire
             var random = new Random();
+
+            // Génération de la carte
             for (int y = 0; y < Hauteur; y++)
             {
                 for (int x = 0; x < Largeur; x++)
                 {
                     var terrain = typesTerrain[random.Next(typesTerrain.Length)];
-                    Cellules[x,y] = new Cellule(x, y, terrain.Type, terrain.Image);
-
-                    Console.WriteLine($"Cellule généré {x},{y}  Terrain : {terrain.Type}");
+                    Cellules[x, y] = new Cellule(x, y, terrain.Type, terrain.Image);
                 }
-                
             }
         }
 
+        public void InitialiserCarte(string personnage, int nombreMonstres)
+        {
+            // Placer le personnage
+            var (posX, posY) = PlacerPersonnage(personnage);
+
+            // Placer les monstres après avoir placé le personnage
+            PlacerMonstresAleatoires(nombreMonstres);
+
+            Console.WriteLine($"Personnage placé en ({posX}, {posY}).");
+        }
 
         public bool IsValidPosition(int x, int y)
         {
@@ -71,16 +77,45 @@ namespace lesEchoDuNeant.Map
                 cellule = GetCellule(posX, posY);
 
                 // Recherche d'une cellule correspondante
-            } while (cellule == null || cellule.TypeTerrain != "Herbe");
+            } while (cellule == null || cellule.TypeTerrain != "Herbe" || cellule.HasPlayer);
 
             // Mise à jour de la cellule pour indiquer la présence du joueur
             cellule.HasPlayer = true;
             cellule.PersonnageImage = $"/images/{personnage.ToLower()}.png";
-            Console.WriteLine($"Position initial du personnage : ({posX}), ({posY})");
+            Console.WriteLine($"Position initiale du personnage : ({posX}, {posY})");
 
             // Retourner les coordonnées
             return (posX, posY);
         }
 
+        public void PlacerMonstresAleatoires(int nombreMonstres)
+        {
+            int monstresPlaces = 0;
+            var random = new Random();
+            int essais = 0;
+
+            while (monstresPlaces < nombreMonstres && essais < 100)
+            {
+                int x = random.Next(0, Largeur);
+                int y = random.Next(0, Hauteur);
+
+                var cellule = GetCellule(x, y);
+
+                if (cellule != null && cellule.TypeTerrain == "Herbe" && !cellule.HasMonstre && !cellule.HasPlayer)
+                {
+                    var monstre = MonstreFactory.CreerMonstreAleatoire();
+                    cellule.Monstres = monstre;
+                    cellule.HasMonstre = true;
+                    monstresPlaces++;
+                }
+
+                essais++;
+
+                if (essais >= 100)
+                {
+                    Console.WriteLine($"Nombre maximal d'essais atteint. Seulement {monstresPlaces} monstres placés sur {nombreMonstres}.");
+                }
+            }
+        }
     }
 }

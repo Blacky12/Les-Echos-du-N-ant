@@ -2,7 +2,7 @@ namespace lesEchoDuNeant.Models
 {
     public class Troll : Monstres
     {
-        public Troll(): base("Troll", 10, 2, 50)
+        public Troll(): base("Troll", 10, 2, 50,"/images/troll.png")
         {
 
         }
