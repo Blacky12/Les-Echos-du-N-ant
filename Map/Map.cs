@@ -62,6 +62,22 @@ namespace lesEchoDuNeant.Map
             return null;
         }
 
+        public Personnages GetPersonnage()
+        {
+            // Parcourir les cellules pour trouver celle contenant un joueur
+            foreach (var cellule in Cellules)
+            {
+                if (cellule.HasPlayer)
+                {
+                    return cellule.Personnage; // Retourne le personnage de la cellule
+                }
+            }
+
+            // Retourne null si aucun joueur n'est trouvé
+            return null;
+        }
+
+
         public (int posX, int posY) PlacerPersonnage(string personnage)
         {
             var random = new Random();

@@ -17,6 +17,8 @@ namespace lesEchoDuNeant.Service
             return !string.IsNullOrEmpty(PersonnageChoisis);
         }
 
+
+
         public void SetInitialPosition(int x,int y)
         {
             PositionPersonnage = (x, y);

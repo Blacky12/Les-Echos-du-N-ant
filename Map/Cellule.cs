@@ -10,6 +10,7 @@ namespace lesEchoDuNeant.Map
         public string TypeTerrain{ get; set; }
         public string Image{get; set; }
         public bool HasPlayer{ get; set; }
+        public Personnages Personnage { get; set; }
         public string PersonnageImage{get; set; }
 
         // monstre

@@ -2,7 +2,8 @@
 @using lesEchoDuNeant.Models
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
-@inject lesEchoDuNeant.Service.ChoixPersoService ChoixPersoService;
+@inject lesEchoDuNeant.Service.ChoixPersoService ChoixPersoService
+@inject lesEchoDuNeant.Service.CombatService CombatService
 
 <h1>Bienvenu dans votre aventure @ChoixPersoService.PersonnageChoisis</h1>
 
@@ -119,11 +120,18 @@
             // verification que la nouvelle cellule est vide
             if(targetCell != null && (targetCell.TypeTerrain == "Herbe" || targetCell.TypeTerrain == "Montagne"))
             {
-                if (targetCell.HasMonstre)
+               if (targetCell.HasMonstre && targetCell.Monstres != null)
                 {
-                    InitierCombat(targetCell.Monstres);
-                    return; // Arreter le deplacement
+                    Console.WriteLine($"Rencontre avec un monstre : {targetCell.Monstres.Nom}");
+
+                    // Effectuer la redirection vers la page de combat
+                    NavigationManager.NavigateTo($"/combat?joueur={ChoixPersoService.PersonnageChoisis}&monstre={targetCell.Monstres.Nom}");
+
+                    Console.WriteLine("Redirection vers la page de combat...");
+                    return; // Stoppe toute autre exécution après la redirection
                 }
+
+
                 //Mettre à jour la cellule actuelle (retirer le joueur)
                 currentCell.HasPlayer = false;
                 currentCell.PersonnageImage = null;
@@ -152,10 +160,6 @@
 
     }
 
-    private void InitierCombat(Monstres monstre)
-    {
-        NavigationManager.Naviga
-    }
 
     public static void TestMethod()
     {

@@ -1,77 +1,105 @@
 @page "/combat"
 @using lesEchoDuNeant.Models
+@using lesEchoDuNeant.Combat
 
+@inject NavigationManager Navigation
 
-<h1>Combat !</h1>
+<h1>Combat</h1>
 
-<h2>@Monstre.Nom</h2>
-<p>Point de vie: @Monstre.PointsDeVie</p>
-
-<br>
-
-<h2>@Personnages.Nom</h2>
-<p>Point de vie: @Personnages.PointsDeVie</p>
-
-@if (FinDuCombat)
+@if (CombatManager != null)
 {
-    <p>@Message</p>
+    <div class="combat-container">
+        <div class="combat-stats">
+            <h2>Votre Personnage</h2>
+            <p>@CombatManager.Joueur.Nom</p>
+            <p>PV : @CombatManager.Joueur.PointsDeVie</p>
+            <p>Force : @CombatManager.Joueur.Force</p>
+            <p>Agilité : @CombatManager.Joueur.Agilite</p>
+        </div>
+
+        <div class="combat-stats">
+            <h2>Monstre</h2>
+            <p>@CombatManager.Monstre.Nom</p>
+            <p>PV : @CombatManager.Monstre.PointsDeVie</p>
+            <p>Force : @CombatManager.Monstre.Force</p>
+            <p>Agilité : @CombatManager.Monstre.Agilite</p>
+        </div>
+    </div>
+
+    <div class="combat-actions">
+        @if (!CombatManager.CombatTerminer)
+        {
+            <button @onclick="Attaquer">Attaquer</button>
+            <button @onclick="Fuir">Fuir</button>
+        }
+        else
+        {
+            <h2>@CombatManager.Resultat</h2>
+            <button @onclick="RetournerAuMenu">Retourner au menu</button>
+        }
+    </div>
+
+    <div class="combat-log">
+        <h3>Journal de Combat</h3>
+        @foreach (var log in CombatLogs)
+        {
+            <p>@log</p>
+        }
+    </div>
+}
+else
+{
+    <p>Chargement...</p>
 }
 
-<div>
-    <button @onclick="() => Attaquer()">Attaquer</button>
-    <button @onclick="() => Defendre()">Defendre</button>
-    @* <button @onclick="() => Message = Personnages.Esquiver()"></button> *@
-</div>
+@code {
+    [Parameter] public string JoueurNom { get; set; }
+    [Parameter] public string MonstreNom { get; set; }
 
-
-@code
-{
-    [Inject]
-    private NavigationManager NavigationManager{get;set;}
-    private lesEchoDuNeant.Models.Personnages Personnages;
-    private lesEchoDuNeant.Models.Monstres Monstre;
-    private string Message;
-    private bool FinDuCombat = false;
+    private CombatManager CombatManager;
+    private List<string> CombatLogs = new List<string>();
 
     protected override void OnInitialized()
     {
-        Personnages = new Guerrier();
-        @* Monstre = MonstreFactory.CreerMonstreAleatoire(); *@
-    }
+        Console.WriteLine($"Paramètres reçus : Joueur = {JoueurNom}, Monstre = {MonstreNom}");
 
-    private async Task Attaquer()
-    {
-        if (FinDuCombat) return;
-        Message = Personnages.Attaquer(Monstre);
-        StateHasChanged();
-
-        if (Monstre.PointsDeVie == 0)
+        if (string.IsNullOrEmpty(JoueurNom) || string.IsNullOrEmpty(MonstreNom))
         {
-            FinDuCombat = true;
-            Message = $"{Monstre.Nom} à été vaincu";
-            StateHasChanged();
-            await RetourMap();
+            Console.WriteLine("Paramètres manquants, redirection vers la nouvelle partie...");
+            Navigation.NavigateTo("/nouvelle-partie", true);
+            return;
         }
-        else if (Personnages.PointsDeVie <= 0)
+
+        // Initialisation des objets (remplacez par vos classes concrètes)
+        var joueur = JoueurNom == "Guerrier" ? new Guerrier { Nom = JoueurNom } : null;
+        var monstre = MonstreNom == "Gobelin" ? new Gobelin { Nom = MonstreNom } : null;
+
+        if (joueur == null || monstre == null)
         {
-            FinDuCombat = true;
-            Message = $"{Personnages.Nom} est tombé au combat ! Game Over..";
-            StateHasChanged();
-            await RetourMap();
+            Console.WriteLine("Erreur lors de la création du joueur ou du monstre.");
+            Navigation.NavigateTo("/nouvelle-partie", true);
+            return;
         }
+
+        // Initialiser le CombatManager
+        CombatManager = new CombatManager(joueur, monstre);
+        CombatLogs.Add($"Un combat commence entre {joueur.Nom} et {monstre.Nom} !");
     }
 
-    private async Task Defendre()
+    private void Attaquer()
     {
-        if (FinDuCombat) return;
-        Personnages.Defendre();
-
-        await Task.Delay(1000);
+        var message = CombatManager.ExecuterTour(joueurAttaqueEnPremier: true);
+        CombatLogs.Add(message);
     }
 
-    private async Task RetourMap()
+    private void Fuir()
     {
-        await Task.Delay(5000);
-        NavigationManager.NavigateTo("/nouvelle-partie");
+        CombatLogs.Add($"{CombatManager.Joueur.Nom} a pris la fuite !");
+        Navigation.NavigateTo("/nouvelle-partie");
+    }
+
+    private void RetournerAuMenu()
+    {
+        Navigation.NavigateTo("/nouvelle-partie");
     }
 }

@@ -23,6 +23,7 @@ namespace lesEchoDuNeant
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    
                 });
                 
     }

@@ -1,7 +1,10 @@
+using System;
+
 namespace lesEchoDuNeant.Models
 {
     public abstract class Personnages
     {
+        public int Id { get; set; }
         public string Nom { get; set; }
         public int Force { get; set; }
         public int Agilite { get; set; }
@@ -10,31 +13,28 @@ namespace lesEchoDuNeant.Models
 
         public Personnages(string nom, int force, int agilite, int intelligence, int pointsDeVie)
         {
+            Random Random = new Random();
             Nom = nom;
             Force = force;
             Agilite = agilite;
             Intelligence = intelligence;
             PointsDeVie = pointsDeVie;
+            Id = Random.Next(1, 10000);
         }
 
         public virtual string AfficherStats()
         {
             return $"Nom: {Nom} \n" +
-                $"Force: {Force} \n" +
-                $"Agilité: {Agilite} \n" +
-                $"Intelligence: {Intelligence}" +
-                $"Points de Vie: {PointsDeVie}";
+                   $"Force: {Force} \n" +
+                   $"Agilité: {Agilite} \n" +
+                   $"Intelligence: {Intelligence} \n" +
+                   $"Points de Vie: {PointsDeVie}";
         }
 
-        public virtual string Attaquer(Monstres cible)
-        {
-            cible.PointsDeVie -= Force;
-            if (cible.PointsDeVie < 0)
-            {
-                cible.PointsDeVie = 0; // Limite les PDV
-            }
-            return $"{Nom} attaque {cible.Nom} et inflige {Force} de dégat";
-        }
+       public int Attaque()
+       {
+            return Force;
+       }
 
         public virtual string Defendre()
         {

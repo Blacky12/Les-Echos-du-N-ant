@@ -199,3 +199,29 @@ li {
         height: 100%;
         z-index: 1; /* Les monstres sont en-dessous */
     }
+
+    .combat-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    
+    .combat-stats {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 45%;
+        background-color: #f9f9f9;
+    }
+    
+    .combat-actions {
+        margin-bottom: 20px;
+    }
+    
+    .combat-log {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #fff;
+        height: 200px;
+        overflow-y: auto;
+    }
+    
