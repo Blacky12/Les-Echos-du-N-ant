@@ -48,7 +48,8 @@
     {
         // Génére une carte de 10x10
         Map = new lesEchoDuNeant.Map.Map(10, 10); // Carte 10x10
-        string personnage = ChoixPersoService.PersonnageChoisis;
+        var personnage = ChoixPersoService.PersonnageChoisis.Nom.ToLower();
+
 
         (posX, posY) = Map.PlacerPersonnage(personnage);
         Map.PlacerMonstresAleatoires(10);
@@ -120,15 +121,20 @@
             // verification que la nouvelle cellule est vide
             if(targetCell != null && (targetCell.TypeTerrain == "Herbe" || targetCell.TypeTerrain == "Montagne"))
             {
-               if (targetCell.HasMonstre && targetCell.Monstres != null)
+               
+                if (targetCell.HasMonstre && targetCell.Monstres != null)
                 {
                     Console.WriteLine($"Rencontre avec un monstre : {targetCell.Monstres.Nom}");
+                    Console.WriteLine($"Personnage choisi : {ChoixPersoService.PersonnageChoisis}");
 
-                    // Effectuer la redirection vers la page de combat
-                    NavigationManager.NavigateTo($"/combat?joueur={ChoixPersoService.PersonnageChoisis}&monstre={targetCell.Monstres.Nom}");
+                    // Stocker les données dans le service
+                    CombatService.InitierCombat(ChoixPersoService.PersonnageChoisis, targetCell.Monstres);
+                    @* Console.WriteLine($"Joueur stocké : {CombatService.Joueur.Nom}, Monstre stocké : {CombatService.Monstre.Nom}"); *@
 
-                    Console.WriteLine("Redirection vers la page de combat...");
-                    return; // Stoppe toute autre exécution après la redirection
+
+                    // Rediriger sans paramètres
+                    NavigationManager.NavigateTo("/combat");
+                    return;
                 }
 
 
@@ -138,7 +144,7 @@
 
                 //Deplacer le joueur dans la nouvelle cellule
                 targetCell.HasPlayer = true;
-                targetCell.PersonnageImage = $"/images/{ChoixPersoService.PersonnageChoisis.ToLower()}.png";
+                targetCell.PersonnageImage = $"/images/{ChoixPersoService.PersonnageChoisis?.Nom.ToLower()}.png";
 
                 //Mettre à jour les coordonnées
                 posX = newX;

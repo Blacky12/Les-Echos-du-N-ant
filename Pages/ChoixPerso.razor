@@ -1,28 +1,29 @@
-@page "/choix-perso";
-@inject lesEchoDuNeant.Service.ChoixPersoService ChoixPersoService;
-@inject NavigationManager NavigationManager;
+@page "/choix-perso"
+@using lesEchoDuNeant.Service
+@using lesEchoDuNeant.Models
+@inject ChoixPersoService ChoixPersoService
+@inject NavigationManager NavigationManager
 
 <h1>Choisissez votre personnage</h1>
 <div class="personnage-container">
-    <div class="personnage-interactif" @onclick='() => ChoisirPerso("Guerrier")'>
+    <div class="personnage-interactif" @onclick='() => ChoisirPerso(new Guerrier())'>
         <img src="/images/guerrier.png" alt="Guerrier" style="width: 150px; height: auto;">
         <br>
         <br>
         <p>Guerrier</p>
     </div>
-    <div class="personnage-interactif" @onclick='() => ChoisirPerso("Archer")'>
+    <div class="personnage-interactif" @onclick='() => ChoisirPerso(new Archer())'>
         <img src="/images/archer.png" alt="Archer" style="width: 150px; height: auto;">
         <br>
         <br>
         <p>Archer</p>   
     </div>
-     <div class="personnage-interactif" @onclick='() => ChoisirPerso("Mage")'>
+    <div class="personnage-interactif" @onclick='() => ChoisirPerso(new Mage())'>
         <img src="/images/mage.png" alt="Mage" style="width: 150px; height: auto;">
         <br>
         <br>
         <p>Mage</p>   
     </div>
-
 </div>
 
 <p>@Message</p>
@@ -30,7 +31,7 @@
 <div>
     @if (!string.IsNullOrEmpty(Message))
     {
-        <button @onclick="ValiderChoix">Valide</button>
+        <button @onclick="ValiderChoix">Valider</button>
     }
 </div>
 
@@ -38,10 +39,11 @@
 {
     private string Message;
 
-    private void ChoisirPerso(string personnage)
+    private void ChoisirPerso(Personnages personnage)
     {
+        // Enregistrez l'objet Personnage dans ChoixPersoService
         ChoixPersoService.SaveChoice(personnage);
-        Message = $"Vous avez choisis: {personnage}";
+        Message = $"Vous avez choisi : {personnage.Nom}";
     }
 
     private void ValiderChoix()

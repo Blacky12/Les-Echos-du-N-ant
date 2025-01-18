@@ -1,28 +1,25 @@
-// Service pour le choix du personnage
-// Dans Blazor les services peuvent être integrée dans le fichier Program.cs
+using lesEchoDuNeant.Models;
+
 namespace lesEchoDuNeant.Service
 {
     public class ChoixPersoService
     {
-        public string PersonnageChoisis{get;private set;}
-        public (int x,int y) PositionPersonnage{get;private set;}
+        public Personnages PersonnageChoisis { get; private set; } // Stockez le personnage en tant qu'objet
+        public (int x, int y) PositionPersonnage { get; private set; }
 
-        public void SaveChoice(string personnage)
+        public void SaveChoice(Personnages personnage)
         {
             PersonnageChoisis = personnage;
         }
 
         public bool PersonnageEstChoisis()
         {
-            return !string.IsNullOrEmpty(PersonnageChoisis);
+            return PersonnageChoisis != null;
         }
 
-
-
-        public void SetInitialPosition(int x,int y)
+        public void SetInitialPosition(int x, int y)
         {
             PositionPersonnage = (x, y);
         }
-
     }
 }

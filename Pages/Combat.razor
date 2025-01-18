@@ -3,6 +3,7 @@
 @using lesEchoDuNeant.Combat
 
 @inject NavigationManager Navigation
+@inject lesEchoDuNeant.Service.CombatService CombatService
 
 <h1>Combat</h1>
 
@@ -59,32 +60,29 @@ else
     private CombatManager CombatManager;
     private List<string> CombatLogs = new List<string>();
 
+
     protected override void OnInitialized()
-    {
-        Console.WriteLine($"Paramètres reçus : Joueur = {JoueurNom}, Monstre = {MonstreNom}");
-
-        if (string.IsNullOrEmpty(JoueurNom) || string.IsNullOrEmpty(MonstreNom))
         {
-            Console.WriteLine("Paramètres manquants, redirection vers la nouvelle partie...");
-            Navigation.NavigateTo("/nouvelle-partie", true);
-            return;
+            var joueur = CombatService.Joueur;
+            var monstre = CombatService.Monstre;
+
+            Console.WriteLine($"CombatService : Joueur = {CombatService.Joueur?.Nom}, Monstre = {CombatService.Monstre?.Nom}");
+
+
+            if (joueur == null || monstre == null)
+            {
+                Console.WriteLine("Données de combat manquantes, redirection vers la nouvelle partie...");
+                @* Navigation.NavigateTo("/nouvelle-partie", true); *@
+                return;
+            }
+
+            Console.WriteLine($"Données récupérées : Joueur = {joueur.Nom}, Monstre = {monstre.Nom}");
+
+            CombatManager = new CombatManager(joueur, monstre);
+            CombatLogs.Add($"Un combat commence entre {joueur.Nom} et {monstre.Nom} !");
         }
 
-        // Initialisation des objets (remplacez par vos classes concrètes)
-        var joueur = JoueurNom == "Guerrier" ? new Guerrier { Nom = JoueurNom } : null;
-        var monstre = MonstreNom == "Gobelin" ? new Gobelin { Nom = MonstreNom } : null;
 
-        if (joueur == null || monstre == null)
-        {
-            Console.WriteLine("Erreur lors de la création du joueur ou du monstre.");
-            Navigation.NavigateTo("/nouvelle-partie", true);
-            return;
-        }
-
-        // Initialiser le CombatManager
-        CombatManager = new CombatManager(joueur, monstre);
-        CombatLogs.Add($"Un combat commence entre {joueur.Nom} et {monstre.Nom} !");
-    }
 
     private void Attaquer()
     {
