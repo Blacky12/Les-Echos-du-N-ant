@@ -1,14 +1,133 @@
 @using lesEchoDuNeant.Map;
+@using lesEchoDuNeant.Models
+@using Microsoft.Extensions.DependencyInjection
+@inject IJSRuntime JSRuntime
+
+
+<h3>Carte du Jeu</h3>
+
+
+<select @onchange="OnPersonnageChange">
+    <option value="Guerrier">Guerrier</option>
+    <option value="Archer">Archer</option>
+    <option value="Mage">Mage</option>
+</select>
+
 @* Composant responsable d'afficher la carte dans l'interface utilisateur *@
 <div class="map-container" style="grid-template-columns: repeat(@Map.Largeur, 1fr);">
     @foreach (var cellule in Map.Cellules)
     {
-        <div style="background-image: url(@cellule.Image)"></div>
+        <div style="background-image: url(@cellule.Image)">
+            @if (Map.Pieges.Any(p => p.X == cellule.X && p.Y == cellule.Y))
+            {
+                <img src="images/piege.webp.jpg" alt="Piège" />
+            }
+            @if (Map.Coffre.Any(c => c.X == cellule.X && c.Y == cellule.Y))
+            {
+                <img src="images/coffre.webp.jpg" alt="Coffre"/>
+            }
+        </div>
     }
 </div>
 
+
+@if (Map != null && personnage  != null)
+{
+    <div class="map-container" style="grid-template-columns: repeat(@Map.Largeur, 1fr);">
+        @foreach (var cellule in Map.Cellules)
+        {
+            <div style="background-image: url(@cellule.Image)">
+
+                @if (Map.Pieges.Any(p => p.X == cellule.X && p.Y == cellule.Y))
+                {
+                    <img src="/images/piege.webp.jpg" alt="Piège" />
+                }
+                @if (Map.Coffre.Any(c => c.X == cellule.X && c.Y == cellule.Y))
+                {
+                    <img src="/images/coffre.webp.jpg" alt="Coffre" />
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Chargement...</p>
+}
+
 @code
 {
+    private Map map;
+    private string personnageSelectionne = "Guerrier";
+
+    protected override void OnInitialized()
+    {
+        // Création de la carte
+        map = new Map(10, 10);
+
+        // Initialisation de la carte avec un personnage et des monstres
+        map.InitialiserCarte(personnageSelectionne, 3);
+
+
+        // Ajout des gestionnaires d'événements clavier et clic
+        JSRuntime.InvokeVoidAsync("addEventListener", "keydown", DotNetObjectReference.Create(this));
+        JSRuntime.InvokeVoidAsync("addEventListener", "click", DotNetObjectReference.Create(this));
+    }
+    
+
+    private void OnPersonnageChange(ChangeEventArgs e)
+    {
+        personnageSelectionne = e.Value.ToString();
+        map.InitialiserCarte(personnageSelectionne, 3);
+    }
+    
+
     [Parameter]
-    public Map Map{get; set;}
+    public Map Map {get; set;}
+
+    public Personnages personnage { get; set; }
+
+    [JSInvokable]
+    public void OnClick(double x, double y)
+    {
+        if (Map != null && personnage != null)
+        {
+            int cellSize = 50; // Remplacez par la taille réelle d'une cellule
+            int gridX = (int)x / cellSize;
+            int gridY = (int)y / cellSize;
+            
+            Personnages.X = gridX;
+            Personnages.Y = gridY;
+            
+            
+            personnage.Interagir(Map); // Interagir avec les éléments de la carte
+            StateHasChanged(); // Met à jour l'affichage après chaque action.
+        }
+    }
+    
+    [JSInvokable]
+    public void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (Map != null && personnage != null)
+        {
+            switch (e.Key)
+            {
+                case "ArrowUp":
+                    Personnages.Y = Math.Max(0, Personnages.Y - 1);
+                    break;
+                case "ArrowDown":
+                    Personnages.Y = Math.Min(Map.Hauteur - 1, Personnages.Y + 1);
+                    break;
+                case "ArrowLeft":
+                    Personnages.X = Math.Max(0, Personnages.X - 1);
+                    break;
+                case "ArrowRight":
+                    Personnages.X = Math.Min(Map.Largeur - 1, Personnages.X + 1);
+                    break;
+            }
+
+            personnage.Interagir(Map); // Interagir avec les éléments de la carte
+            StateHasChanged(); // Met à jour l'affichage après chaque action
+        }
+    }
 }

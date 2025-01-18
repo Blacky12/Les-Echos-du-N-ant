@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using lesEchoDuNeant.Models;
 
 namespace lesEchoDuNeant.Map
@@ -9,12 +10,16 @@ namespace lesEchoDuNeant.Map
         public int Hauteur { get; private set; }
         public int Largeur { get; private set; }
         public Cellule[,] Cellules { get; private set; }
+        public List<Piege> Pieges { get; private set; }
+        public List<Coffre> Coffre { get; private set; }
 
         public Map(int hauteur, int largeur)
         {
             Hauteur = hauteur;
             Largeur = largeur;
             Cellules = new Cellule[Largeur, Hauteur];
+            Pieges = new List<Piege>();
+            Coffre = new List<Coffre>();
 
             // Types de terrain
             var typesTerrain = new[]
@@ -34,6 +39,30 @@ namespace lesEchoDuNeant.Map
                     var terrain = typesTerrain[random.Next(typesTerrain.Length)];
                     Cellules[x, y] = new Cellule(x, y, terrain.Type, terrain.Image);
                 }
+            }
+            
+            // Génération aléatoire des pièges et coffres
+            GenererPieges(random);
+            GenererCoffres(random);
+        }
+        
+        private void GenererPieges(Random random)
+        {
+            for (int i = 0; i < 5; i++) // Ajoute 5 pièges aléatoires
+            {
+                int x = random.Next(Largeur);
+                int y = random.Next(Hauteur);
+                Pieges.Add(new Piege("Piège à loups", 20, x, y));
+            }
+        }
+
+        private void GenererCoffres(Random random)
+        {
+            for (int i = 0; i < 5; i++) // Ajoute 5 coffres aléatoires
+            {
+                int x = random.Next(Largeur);
+                int y = random.Next(Hauteur);
+                Coffre.Add(new Coffre("Coffre en bois", 5, 20, x, y));
             }
         }
 
